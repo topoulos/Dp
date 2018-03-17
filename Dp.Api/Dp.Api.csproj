@@ -129,7 +129,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="Data\ApplicationUserManager.cs" />
+    <Compile Include="Data\DpRoleManager.cs" />
+    <Compile Include="Data\DpUserManager.cs" />
     <Compile Include="Data\DbInitializer.cs" />
     <Compile Include="Data\DpContext.cs" />
     <Compile Include="Data\AuthRepository.cs" />
@@ -138,8 +139,12 @@
     <Compile Include="Migrations\201803160633378_initial.Designer.cs">
       <DependentUpon>201803160633378_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803170614171_change-today.cs" />
+    <Compile Include="Migrations\201803170614171_change-today.Designer.cs">
+      <DependentUpon>201803170614171_change-today.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\RoleStore.cs" />
+    <Compile Include="Models\DpRoleStore.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\DpModelBase.cs" />
     <Compile Include="Models\DpProject.cs" />
@@ -148,13 +153,14 @@
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserRole.cs" />
-    <Compile Include="Models\UserStore.cs" />
+    <Compile Include="Models\DpUserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Dp-Api - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -168,6 +174,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201803160633378_initial.resx">
       <DependentUpon>201803160633378_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803170614171_change-today.resx">
+      <DependentUpon>201803170614171_change-today.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

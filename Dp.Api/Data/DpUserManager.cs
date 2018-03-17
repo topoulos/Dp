@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Dp.Api.Models;
+﻿using Dp.Api.Models;
 using DP.Api.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -10,16 +6,17 @@ using Microsoft.Owin;
 
 namespace Dp.Api.Data
 {
-    public class ApplicationUserManager: UserManager<User, int>
+    public class DpUserManager : UserManager<User, int>
     {
-        public ApplicationUserManager(IUserStore<User, int> store) : base(store)
+        public DpUserManager(IUserStore<User, int> store) : base(store)
         {
         }
-        public static ApplicationUserManager Create(
-            IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
+
+        public static DpUserManager Create(
+            IdentityFactoryOptions<DpUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(
-                new UserStore(context.Get<DpContext>()));
+            var manager = new DpUserManager(
+                new DpUserStore(context.Get<DpContext>()));
             // Configure validation logic for usernames 
             manager.UserValidator = new UserValidator<User, int>(manager)
             {
@@ -33,7 +30,7 @@ namespace Dp.Api.Data
                 RequireNonLetterOrDigit = true,
                 RequireDigit = true,
                 RequireLowercase = true,
-                RequireUppercase = true,
+                RequireUppercase = true
             };
             // Register two factor authentication providers. This application uses Phone 
             // and Emails as a step of receiving a code for verifying the user 
@@ -53,11 +50,9 @@ namespace Dp.Api.Data
             //manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
-            {
                 manager.UserTokenProvider =
                     new DataProtectorTokenProvider<User, int>(
                         dataProtectionProvider.Create("ASP.NET Identity"));
-            }
             return manager;
         }
     }

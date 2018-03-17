@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Dp.Api.Data;
+using Dp.Api.Models;
 using DP.Api.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace DP.Api.Data
 {
@@ -9,7 +12,24 @@ namespace DP.Api.Data
     {
         public static void Initialize(DpContext context)
         {
+            if (!context.Roles.Any(r => r.Name == "AppAdmin"))
+            {
+                var store = new DpRoleStore(context);
+                var manager = new DpRoleManager(store);
+                var role = new Role() { Name = "AppAdmin" };
 
+                manager.Create(role);
+            }
+
+            if (!context.Users.Any(u => u.UserName == "founder"))
+            {
+                var store = new DpUserStore(context);
+                var manager = new DpUserManager(store);
+                var user = new User { UserName = "founder" };
+
+                manager.Create(user, "Password1!");
+                manager.AddToRole(user.Id, "AppAdmin");
+            }
             // Look for any students.
             if (context.DpProjects.Any())
             {

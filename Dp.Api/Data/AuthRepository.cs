@@ -10,12 +10,12 @@ namespace Dp.Api.Data
     public class AuthRepository : IDisposable
     {
         private readonly DpContext _ctx;
-        private readonly ApplicationUserManager _userManager;
+        private readonly DpUserManager _userManager;
 
         public AuthRepository()
         {
             _ctx = new DpContext();
-            _userManager = new ApplicationUserManager(new UserStore(_ctx));
+            _userManager = new DpUserManager(new DpUserStore(_ctx));
         }
 
         public void Dispose()
