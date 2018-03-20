@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "Dp.Task.Api.Core/Dp.Task.Api.Core/Dp.TaskSystem.Api.Core.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

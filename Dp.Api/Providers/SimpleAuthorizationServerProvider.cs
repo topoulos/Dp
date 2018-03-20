@@ -1,45 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
-using Dp.Api.Data;
-using DP.Api.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Dp.Models.Security;
 using Microsoft.Owin.Security.OAuth;
 
 namespace Dp.Api.Providers
 {
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
-        {
-            context.Validated();
-        }
-
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            context.OwinContext.Response.Headers.Add(key: "Access-Control-Allow-Origin", value: new[] {"*"});
 
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
-
-            using (AuthRepository _repo = new AuthRepository())
+            using (var _repo = new AuthRepository())
             {
-                User user = await _repo.FindUser(context.UserName, context.Password);
+                var user = await _repo.FindUser(userName: context.UserName, password: context.Password);
 
                 if (user == null)
                 {
-                    context.SetError("invalid_grant", "The user name or password is incorrect.");
+                    context.SetError(error: "invalid_grant", errorDescription: "The user name or password is incorrect.");
                     return;
                 }
             }
 
-            var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim("sub", context.UserName));
-            identity.AddClaim(new Claim("role", "user"));
+            var identity = new ClaimsIdentity(authenticationType: context.Options.AuthenticationType);
+            identity.AddClaim(claim: new Claim(type: "sub", value: context.UserName));
+            identity.AddClaim(claim: new Claim(type: "role", value: "user"));
 
-            context.Validated(identity);
+            context.Validated(identity: identity);
+        }
 
+        public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        {
+            await Task.Run(action: () => { context.Validated(); });
         }
     }
 }
